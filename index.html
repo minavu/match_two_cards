@@ -18,24 +18,19 @@
         <main>
             <section id="left-section">
                 <h3>Set:</h3>
-                <p>Card Deck</p>
-                <p>Others</p>
+                <p><a href="#">Card Deck</a></p>
                 <h3>Grid:</h3>
-                <p>2 x 2</p>
-                <p>4 x 4</p>
-                <p>6 x 6</p>
-                <p>8 x 8</p>
+                <p><a href="#" onclick="changeGrid(4);">4 x 4</a></p>
+                <p><a href="#" onclick="changeGrid(6);">6 x 6</a></p>
             </section>
-            <section id="game-board">
-
-            </section>
+            <section id="game-board" class="grid-4x4"></section>
             <section id="right-section">
                 <h3>Score:</h3>
-                <p>000</p>
+                <p id="score">000</p>
                 <h3>Time:</h3>
-                <p>00:00.00</p>
+                <p id="time">00:00</p>
                 <h3>Moves:</h3>
-                <p>000</p>
+                <p id="moves">000</p>
                 <button id="pause">PAUSE</button>
                 <button id="reset">RESET</button>
             </section>
