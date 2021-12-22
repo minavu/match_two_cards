@@ -1,8 +1,10 @@
 let game_board = document.getElementById("game-board");
-let WINNING_SCORE = 16;
+let DEFAULT_SIZE = 2;
+let WINNING_SCORE = DEFAULT_SIZE * DEFAULT_SIZE;
+let INTERVAL = 0;
 
 function changeGrid(size) {
-    let grids = ["grid-4x4", "grid-6x6"];
+    let grids = ["grid-2x2", "grid-4x4", "grid-6x6"];
     WINNING_SCORE = size * size;
     game_board.classList.remove(...grids);
     game_board.classList.add(`grid-${size}x${size}`);
@@ -23,7 +25,7 @@ function resetGame(size) {
     stopWatch(size);
 }
 
-function fetchCards(size = 4) {
+function fetchCards(size = DEFAULT_SIZE) {
     fetch(`https://deckofcardsapi.com/api/deck/new/draw/?count=${size*size/2}`)
         .then(response => {
             return response.json();
@@ -48,7 +50,7 @@ function fetchCards(size = 4) {
                 card_back_image.setAttribute("src", "./joker.png");
                 card_back_image.setAttribute("alt", "back image of card");
                 card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${size}x${size}`);
-                card_back_image.setAttribute("onclick", "flip(event);");
+                card_back_image.setAttribute("onclick", `flip(event, ${size});`);
 
                 let card_front_image = document.createElement("img");
                 card_front_image.setAttribute("src", card.image);
@@ -76,7 +78,7 @@ function fisherYatesShuffle(array) {
     }
 }
 
-function flip(event) {
+function flip(event, size) {
     let moves = document.getElementById("moves").innerHTML;
     moves = String(Number(moves) + 1);
     document.getElementById("moves").innerHTML = moves.padStart(3, "0");
@@ -87,10 +89,10 @@ function flip(event) {
     flip.classList.add("flipped-card");
 
     let all_flipped = document.querySelectorAll(".flipped-card");
-    if (all_flipped.length === 2) setTimeout(checkMatch, 1000, all_flipped);
+    if (all_flipped.length === 2) setTimeout(checkMatch, 1000, all_flipped, size);
 }
 
-function checkMatch(all_flipped) {
+function checkMatch(all_flipped, size) {
     let cards = [];
     all_flipped.forEach(card => {
         let {lastChild} = card;
@@ -105,7 +107,7 @@ function checkMatch(all_flipped) {
         let score = document.getElementById("score").innerHTML;
         score = String(Number(score) + 2);
         document.getElementById("score").innerHTML = score.padStart(3, "0");
-        if (Number(score) === WINNING_SCORE) youWin();
+        if (Number(score) === WINNING_SCORE) youWin(size);
     } else {
         all_flipped.forEach(card => {
             card.classList.remove("flipped-card");
@@ -114,11 +116,38 @@ function checkMatch(all_flipped) {
     }
 }
 
-function youWin() {
-    alert("YOU WIN!!!  CONGRATULATIONS!!!");
+function youWin(size) {
+    clearInterval(INTERVAL);
+    let winning_box = document.getElementById("winning-box");
+    winning_box.style.display = "block";
+    document.getElementById("winning-score").innerHTML = document.getElementById("score").innerHTML;
+    document.getElementById("winning-time").innerHTML = document.getElementById("time").innerHTML;
+    document.getElementById("winning-moves").innerHTML = document.getElementById("moves").innerHTML;
+    let replay = document.getElementById("replay");
+    replay.removeAttribute("disabled");
+    replay.onclick = () => {
+        resetGame(size);
+        winning_box.style.display = "none";
+    }
+    let close = document.getElementById("close-winning");
+    close.onclick = () => {
+        document.getElementById("pause-play").setAttribute("disabled", true);
+        winning_box.style.display = "none";
+    }
 }
 
-function stopWatch(size = 4) {
+function youLose(size) {
+    clearInterval(INTERVAL);
+    let losing_box = document.getElementById("losing-box");
+    losing_box.style.display = "block";
+    let close = document.getElementById("close-losing");
+    close.onclick = () => {
+        resetGame(size);
+        losing_box.style.display = "none";
+    }
+}
+
+function stopWatch(size) {
     let tens = 0;
     let secs = 0;
     let mins = 0;
@@ -127,7 +156,6 @@ function stopWatch(size = 4) {
     let minutes = document.getElementById("minutes");
     let pause_play = document.getElementById("pause-play");
     let reset = document.getElementById("reset");
-    let interval = 0;
 
     const watch = () => {
         tens++;
@@ -139,20 +167,23 @@ function stopWatch(size = 4) {
             mins++;
             secs = 0;
         }
+        if (mins === 60 && tens > 0) {
+            youLose(size);
+        }
         tenths.innerHTML = String(tens).padStart(2, "0");
         seconds.innerHTML = String(secs).padStart(2, "0");
         minutes.innerHTML = String(mins).padStart(2, "0");
     }
 
     const start = () => {
-        interval = setInterval(watch, 10);
+        INTERVAL = setInterval(watch, 10);
         document.removeEventListener("click", start, true);
         pause_play.removeAttribute("disabled");
         reset.removeAttribute("disabled");
     }
 
     const stop = () => {
-        clearInterval(interval);
+        clearInterval(INTERVAL);
     }
 
     document.addEventListener("click", start, true);
@@ -167,7 +198,7 @@ function stopWatch(size = 4) {
             start();
             pause_play.innerHTML = "PAUSE";
             pause_play.classList.replace("play", "pause");
-            document.querySelectorAll(".game-card-back").forEach(card => card.setAttribute("onclick", "flip(event);"));
+            document.querySelectorAll(".game-card-back").forEach(card => card.setAttribute("onclick", `flip(event, ${size});`));
         }
     }
 

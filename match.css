@@ -35,6 +35,11 @@ footer {
     text-align: center;
 }
 
+button {
+    margin-top: 15px;
+    cursor: pointer;
+}
+
 #left-section, #right-section {
     width: 15%;
 }
@@ -48,8 +53,6 @@ footer {
 }
 
 #right-section button {
-    display: block;
-    margin-top: 15px;
     float: right;
     clear: right;
 }
@@ -58,6 +61,12 @@ footer {
     display: grid;
     width: auto;
     height: 100%;
+}
+
+.grid-2x2 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
 }
 
 .grid-4x4 {
@@ -70,6 +79,24 @@ footer {
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(6, 1fr);
     gap: 5px;
+}
+
+.game-card-2x2 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 30px - 36px) / 2);
+    /* 6rem for header, 30px for main (10px for gaps, 20px for margins), 36px for footer */
+}
+
+.game-card-4x4 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 50px - 36px) / 4);
+    /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
+}
+
+.game-card-6x6 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
+    /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */
 }
 
 .game-card-container {
@@ -101,29 +128,34 @@ footer {
     transform: rotateY(180deg);
 }
 
-.game-card-4x4 {
-    width: auto;
-    height: calc(calc(100vh - 6rem - 50px - 36px) / 4);
-    /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
+.close {
+    position: absolute;
+    top: 0;
+    right: calc(100% - 100%);
+    padding: 0 7px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: gray;
+    cursor: pointer;
 }
 
-.game-card-6x6 {
-    width: auto;
-    height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
-    /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */
-}
-
-#winning-box {
+#winning-box, #losing-box {
     position: absolute;
     top: 6rem;
     width: 100%;
+    height: calc(100vh - 6rem);
     display: none;
 }
 
-#winning-message {
+/* #winning-box {
+    display: none;
+} */
+
+#winning-message, #losing-message {
+    position: relative;
     width: fit-content;
     margin: auto;
-    padding: 5px 20px 20px;
+    padding: 10px 55px 25px;
     background-color: beige;
     border: 2px solid rgb(139, 139, 127);
     text-align: center;

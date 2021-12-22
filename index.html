@@ -20,10 +20,11 @@
                 <h3>Set:</h3>
                 <p><a href="#">Card Deck</a></p>
                 <h3>Grid:</h3>
+                <p><a href="#" onclick="changeGrid(2);">2 x 2</a></p>
                 <p><a href="#" onclick="changeGrid(4);">4 x 4</a></p>
                 <p><a href="#" onclick="changeGrid(6);">6 x 6</a></p>
             </section>
-            <section id="game-board" class="grid-4x4"></section>
+            <section id="game-board" class="grid-2x2"></section>
             <section id="right-section">
                 <h3>Score:</h3>
                 <p id="score">000</p>
@@ -40,7 +41,8 @@
         </footer>
         
         <section id="winning-box">
-            <section id="winning-message">
+            <div id="winning-message">
+                <span id="close-winning" class="close">&times;</span>
                 <h1>Congratulations!</h1>
                 <h1>You Win!</h1>
                 <h3>Score:</h3>
@@ -49,7 +51,17 @@
                 <p id="winning-time">00:00.00</p>
                 <h3>Moves:</h3>
                 <p id="winning-moves">000</p>
-            </section>
+                <button id="replay" disabled>REPLAY</button>
+            </div>
+        </section>
+        <section id="losing-box">
+            <div id="losing-message">
+                <span id="close-losing" class="close">&times;</span>
+                <h1>Time's Up!</h1>
+                <h1>You Lose!</h1>
+                <h3>Try playing again!</h3>
+                <p>Match two cards and clear the board of jokers in under 1 hour.</p>
+            </div>
         </section>
     </div>
 </body>
