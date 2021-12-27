@@ -1,17 +1,28 @@
 let game_board = document.getElementById("game-board");
+let DEFAULT_DECK = "playing";
 let DEFAULT_SIZE = 2;
 let WINNING_SCORE = DEFAULT_SIZE * DEFAULT_SIZE;
 let INTERVAL = 0;
+let curr_grid_row = DEFAULT_SIZE;
+let curr_grid_col = DEFAULT_SIZE;
+let curr_deck = DEFAULT_DECK;
 
 function changeGrid(size_r, size_c) {
+    curr_grid_row = size_r;
+    curr_grid_col = size_c;
     let grids = ["grid-2x2", "grid-2x3", "grid-4x4", "grid-4x5", "grid-6x6", "grid-6x7", "grid-6x8", "grid-6x9"];
     game_board.classList.remove(...grids);
-    WINNING_SCORE = size_r * size_c;
-    game_board.classList.add(`grid-${size_r}x${size_c}`);
-    resetGame(size_r, size_c);
+    game_board.classList.add(`grid-${curr_grid_row}x${curr_grid_col}`);
+    WINNING_SCORE = curr_grid_row * curr_grid_col;
+    resetGame();
 }
 
 function changeDeck(deck) {
+    curr_deck = deck;
+    resetGame();
+}
+
+function resetGame() {
     document.querySelectorAll(".game-card").forEach(card => card.remove());
     document.getElementById("score").innerHTML = "000";
     document.getElementById("time").innerHTML = '<span id="minutes">00</span>:<span id="seconds">00</span>.<span id="tenths">00</span>';
@@ -21,26 +32,13 @@ function changeDeck(deck) {
     pause_play.innerHTML = "PAUSE";
     pause_play.classList.replace("play", "pause");
     document.getElementById("reset").setAttribute("disabled", true);
-    fetchPokemonCards();
+    if (curr_deck === "playing") fetchPlayingCards();
+    if (curr_deck === "pokemon") fetchPokemonCards();
     stopWatch();
 }
 
-function resetGame(size_r, size_c) {
-    document.querySelectorAll(".game-card").forEach(card => card.remove());
-    document.getElementById("score").innerHTML = "000";
-    document.getElementById("time").innerHTML = '<span id="minutes">00</span>:<span id="seconds">00</span>.<span id="tenths">00</span>';
-    document.getElementById("moves").innerHTML = "000";
-    let pause_play = document.getElementById("pause-play");
-    pause_play.setAttribute("disabled", true);
-    pause_play.innerHTML = "PAUSE";
-    pause_play.classList.replace("play", "pause");
-    document.getElementById("reset").setAttribute("disabled", true);
-    fetchCards(size_r, size_c);
-    stopWatch(size_r, size_c);
-}
-
-function fetchPokemonCards(size_r = DEFAULT_SIZE, size_c = DEFAULT_SIZE) {
-    fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp1&pageSize=${size_r*size_c/2}`, {
+function fetchPokemonCards() {
+    fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp1&pageSize=${curr_grid_row*curr_grid_col/2}`, {
             method: "GET",
             headers: {
                 "X-Api-Key": "66fc5e9e-c1e7-4ebe-8b04-d30a2734cf4c",
@@ -55,27 +53,27 @@ function fetchPokemonCards(size_r = DEFAULT_SIZE, size_c = DEFAULT_SIZE) {
             fisherYatesShuffle(cards_twice);
             cards_twice.forEach((card, index) => {
                 let card_container = document.createElement("div");
-                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${size_r}x${size_c}`);
+                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${curr_grid_row}x${curr_grid_col}`);
 
                 let card_flipper = document.createElement("div");
-                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${size_r}x${size_c}`);
+                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${curr_grid_row}x${curr_grid_col}`);
 
                 let card_placer = document.createElement("img");
                 card_placer.setAttribute("src", "./images/pokemon.png");
                 card_placer.setAttribute("alt", "back image of card");
-                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${size_r}x${size_c}`);
+                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${curr_grid_row}x${curr_grid_col}`);
                 
                 let card_back_image = document.createElement("img");
                 card_back_image.setAttribute("src", "./images/pokemon.png");
                 card_back_image.setAttribute("alt", "back image of card");
-                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${size_r}x${size_c}`);
-                card_back_image.setAttribute("onclick", `flip(event, ${size_r}, ${size_c});`);
+                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${curr_grid_row}x${curr_grid_col}`);
+                card_back_image.setAttribute("onclick", `flip(event);`);
 
                 let card_front_image = document.createElement("img");
                 card_front_image.setAttribute("src", card.images.small);
                 card_front_image.setAttribute("alt", card.name);
                 card_front_image.setAttribute("name", card.id);
-                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${size_r}x${size_c}`);
+                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${curr_grid_row}x${curr_grid_col}`);
 
                 card_container.append(card_flipper);
                 card_flipper.append(card_placer);
@@ -90,8 +88,8 @@ function fetchPokemonCards(size_r = DEFAULT_SIZE, size_c = DEFAULT_SIZE) {
     ;
 }
 
-function fetchCards(size_r = DEFAULT_SIZE, size_c = DEFAULT_SIZE) {
-    fetch(`https://deckofcardsapi.com/api/deck/new/draw/?count=${size_r*size_c/2}`)
+function fetchPlayingCards() {
+    fetch(`https://deckofcardsapi.com/api/deck/new/draw/?count=${curr_grid_row*curr_grid_col/2}`)
         .then(response => {
             return response.json();
         })
@@ -101,27 +99,27 @@ function fetchCards(size_r = DEFAULT_SIZE, size_c = DEFAULT_SIZE) {
             fisherYatesShuffle(cards_twice);
             cards_twice.forEach((card, index) => {
                 let card_container = document.createElement("div");
-                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${size_r}x${size_c}`);
+                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${curr_grid_row}x${curr_grid_col}`);
 
                 let card_flipper = document.createElement("div");
-                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${size_r}x${size_c}`);
+                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${curr_grid_row}x${curr_grid_col}`);
 
                 let card_placer = document.createElement("img");
                 card_placer.setAttribute("src", "./images/joker.png");
                 card_placer.setAttribute("alt", "back image of card");
-                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${size_r}x${size_c}`);
+                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${curr_grid_row}x${curr_grid_col}`);
                 
                 let card_back_image = document.createElement("img");
                 card_back_image.setAttribute("src", "./images/joker.png");
                 card_back_image.setAttribute("alt", "back image of card");
-                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${size_r}x${size_c}`);
-                card_back_image.setAttribute("onclick", `flip(event, ${size_r}, ${size_c});`);
+                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${curr_grid_row}x${curr_grid_col}`);
+                card_back_image.setAttribute("onclick", `flip(event);`);
 
                 let card_front_image = document.createElement("img");
                 card_front_image.setAttribute("src", card.image);
                 card_front_image.setAttribute("alt", card.code);
                 card_front_image.setAttribute("name", card.code);
-                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${size_r}x${size_c}`);
+                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${curr_grid_row}x${curr_grid_col}`);
 
                 card_container.append(card_flipper);
                 card_flipper.append(card_placer);
@@ -143,7 +141,7 @@ function fisherYatesShuffle(array) {
     }
 }
 
-function flip(event, size_r, size_c) {
+function flip(event) {
     let moves = document.getElementById("moves").innerHTML;
     moves = String(Number(moves) + 1);
     document.getElementById("moves").innerHTML = moves.padStart(3, "0");
@@ -154,10 +152,10 @@ function flip(event, size_r, size_c) {
     flip.classList.add("flipped-card");
 
     let all_flipped = document.querySelectorAll(".flipped-card");
-    if (all_flipped.length === 2) setTimeout(checkMatch, 1000, all_flipped, size_r, size_c);
+    if (all_flipped.length === 2) setTimeout(checkMatch, 1000, all_flipped);
 }
 
-function checkMatch(all_flipped, size_r, size_c) {
+function checkMatch(all_flipped) {
     let cards = [];
     all_flipped.forEach(card => {
         let {lastChild} = card;
@@ -190,7 +188,7 @@ function removeClass(object, remove_class) {
     object.classList.remove(remove_class);
 }
 
-function youWin(size_r, size_c) {
+function youWin() {
     clearInterval(INTERVAL);
     let winning_box = document.getElementById("winning-box");
     winning_box.style.display = "block";
@@ -201,7 +199,7 @@ function youWin(size_r, size_c) {
     let replay = document.getElementById("replay");
     replay.removeAttribute("disabled");
     replay.onclick = () => {
-        resetGame(size_r, size_c);
+        resetGame();
         winning_box.style.display = "none";
     }
     let close = document.getElementById("close-winning");
@@ -211,18 +209,18 @@ function youWin(size_r, size_c) {
     }
 }
 
-function youLose(size_r, size_c) {
+function youLose() {
     clearInterval(INTERVAL);
     let losing_box = document.getElementById("losing-box");
     losing_box.style.display = "block";
     let close = document.getElementById("close-losing");
     close.onclick = () => {
-        resetGame(size_r, size_c);
+        resetGame();
         losing_box.style.display = "none";
     }
 }
 
-function stopWatch(size) {
+function stopWatch() {
     let tens = 0;
     let secs = 0;
     let mins = 0;
@@ -273,15 +271,15 @@ function stopWatch(size) {
             start();
             pause_play.innerHTML = "PAUSE";
             pause_play.classList.replace("play", "pause");
-            document.querySelectorAll(".game-card-back").forEach(card => card.setAttribute("onclick", `flip(event, ${size});`));
+            document.querySelectorAll(".game-card-back").forEach(card => card.setAttribute("onclick", `flip(event);`));
         }
     }
 
     reset.onclick = () => {
         stop();
-        resetGame(size_r, size_c);
+        resetGame();
     }
 }
 
-fetchCards();
+fetchPlayingCards();
 stopWatch();
