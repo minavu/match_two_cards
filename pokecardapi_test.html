@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poke Card API Test</title>
+</head>
+<body>
+    <section id="card"></section>
+    <script>
+        let options = {
+            method: "GET",
+            headers: {
+                "X-Api-Key": "66fc5e9e-c1e7-4ebe-8b04-d30a2734cf4c",
+            }
+        }
+        // fetch(`https://api.pokemontcg.io/v2/sets`, options)
+        fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp1&pageSize=10`, options)
+            .then(response => {
+                return response.json();
+            })
+            .then(response => {
+                let {data} = response;
+                console.log(data);
+                data.forEach(card => {
+                    let card_image = document.createElement("img");
+                    card_image.setAttribute("src", card.images.small);
+                    card_image.setAttribute("alt", card.name);
+                    card_image.setAttribute("class", "game-card");
+                    document.getElementById("card").append(card_image);
+                });
+                return data;
+            })
+            .catch(error => {
+                console.error("Request failed", error)
+            })
+        ;
+    </script>
+</body>
+</html>

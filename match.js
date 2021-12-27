@@ -11,6 +11,20 @@ function changeGrid(size_r, size_c) {
     resetGame(size_r, size_c);
 }
 
+function changeDeck(deck) {
+    document.querySelectorAll(".game-card").forEach(card => card.remove());
+    document.getElementById("score").innerHTML = "000";
+    document.getElementById("time").innerHTML = '<span id="minutes">00</span>:<span id="seconds">00</span>.<span id="tenths">00</span>';
+    document.getElementById("moves").innerHTML = "000";
+    let pause_play = document.getElementById("pause-play");
+    pause_play.setAttribute("disabled", true);
+    pause_play.innerHTML = "PAUSE";
+    pause_play.classList.replace("play", "pause");
+    document.getElementById("reset").setAttribute("disabled", true);
+    fetchPokemonCards();
+    stopWatch();
+}
+
 function resetGame(size_r, size_c) {
     document.querySelectorAll(".game-card").forEach(card => card.remove());
     document.getElementById("score").innerHTML = "000";
@@ -23,6 +37,57 @@ function resetGame(size_r, size_c) {
     document.getElementById("reset").setAttribute("disabled", true);
     fetchCards(size_r, size_c);
     stopWatch(size_r, size_c);
+}
+
+function fetchPokemonCards(size_r = DEFAULT_SIZE, size_c = DEFAULT_SIZE) {
+    fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp1&pageSize=${size_r*size_c/2}`, {
+            method: "GET",
+            headers: {
+                "X-Api-Key": "66fc5e9e-c1e7-4ebe-8b04-d30a2734cf4c",
+            }
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(response => {
+            let {data} = response;
+            let cards_twice = [...data, ...data];
+            fisherYatesShuffle(cards_twice);
+            cards_twice.forEach((card, index) => {
+                let card_container = document.createElement("div");
+                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${size_r}x${size_c}`);
+
+                let card_flipper = document.createElement("div");
+                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${size_r}x${size_c}`);
+
+                let card_placer = document.createElement("img");
+                card_placer.setAttribute("src", "./images/pokemon.png");
+                card_placer.setAttribute("alt", "back image of card");
+                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${size_r}x${size_c}`);
+                
+                let card_back_image = document.createElement("img");
+                card_back_image.setAttribute("src", "./images/pokemon.png");
+                card_back_image.setAttribute("alt", "back image of card");
+                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${size_r}x${size_c}`);
+                card_back_image.setAttribute("onclick", `flip(event, ${size_r}, ${size_c});`);
+
+                let card_front_image = document.createElement("img");
+                card_front_image.setAttribute("src", card.images.small);
+                card_front_image.setAttribute("alt", card.name);
+                card_front_image.setAttribute("name", card.id);
+                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${size_r}x${size_c}`);
+
+                card_container.append(card_flipper);
+                card_flipper.append(card_placer);
+                card_flipper.append(card_back_image);
+                card_flipper.append(card_front_image);
+                game_board.append(card_container);
+            })
+        })
+        .catch(error => {
+            console.error("Request failed", error)
+        })
+    ;
 }
 
 function fetchCards(size_r = DEFAULT_SIZE, size_c = DEFAULT_SIZE) {
@@ -42,12 +107,12 @@ function fetchCards(size_r = DEFAULT_SIZE, size_c = DEFAULT_SIZE) {
                 card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${size_r}x${size_c}`);
 
                 let card_placer = document.createElement("img");
-                card_placer.setAttribute("src", "./joker.png");
+                card_placer.setAttribute("src", "./images/joker.png");
                 card_placer.setAttribute("alt", "back image of card");
                 card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${size_r}x${size_c}`);
                 
                 let card_back_image = document.createElement("img");
-                card_back_image.setAttribute("src", "./joker.png");
+                card_back_image.setAttribute("src", "./images/joker.png");
                 card_back_image.setAttribute("alt", "back image of card");
                 card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${size_r}x${size_c}`);
                 card_back_image.setAttribute("onclick", `flip(event, ${size_r}, ${size_c});`);
