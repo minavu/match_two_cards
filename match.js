@@ -99,27 +99,38 @@ function checkMatch(all_flipped, size) {
         cards.push(lastChild.name);
     });
     if (cards[0] === cards[1]) {
-        alert("MATCH");
+        // console.log(all_flipped);
         all_flipped.forEach(card => {
-            card.classList.remove("flipped-card");
-            card.classList.add("matched-card");
+            card.classList.replace("flipped-card", "matched-card");
+            card.classList.add("match-effect-spin");
+            card.children[1].classList.add("match-effect-fadeout");
+            card.children[2].classList.add("match-effect-fadeout");
         });
         let score = document.getElementById("score").innerHTML;
         score = String(Number(score) + 2);
         document.getElementById("score").innerHTML = score.padStart(3, "0");
-        if (Number(score) === WINNING_SCORE) youWin(size);
+        if (Number(score) === WINNING_SCORE) {
+            setTimeout(youWin, 3500);
+        }
     } else {
         all_flipped.forEach(card => {
             card.classList.remove("flipped-card");
+            card.classList.add("nomatch-effect-shake");
+            setTimeout(removeClass, 500, card, "nomatch-effect-shake");
             card.style.transform = "rotateY(0deg)";
         });
     }
+}
+
+function removeClass(object, remove_class) {
+    object.classList.remove(remove_class);
 }
 
 function youWin(size) {
     clearInterval(INTERVAL);
     let winning_box = document.getElementById("winning-box");
     winning_box.style.display = "block";
+    winning_box.classList.add("match-effect-scalein");
     document.getElementById("winning-score").innerHTML = document.getElementById("score").innerHTML;
     document.getElementById("winning-time").innerHTML = document.getElementById("time").innerHTML;
     document.getElementById("winning-moves").innerHTML = document.getElementById("moves").innerHTML;

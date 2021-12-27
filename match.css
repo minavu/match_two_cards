@@ -147,10 +147,6 @@ button {
     display: none;
 }
 
-/* #winning-box {
-    display: none;
-} */
-
 #winning-message, #losing-message {
     position: relative;
     width: fit-content;
@@ -159,4 +155,98 @@ button {
     background-color: beige;
     border: 2px solid rgb(139, 139, 127);
     text-align: center;
+}
+
+.match-effect-spin {
+    animation-name: spin;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes spin {
+    from {
+        transform: rotateY(180deg);
+    }
+    25% {
+        transform: rotateY(360deg);
+    }
+    50% {
+        transform: rotateY(540deg);
+    }
+    75% {
+        transform: rotateY(720deg);
+    }
+    to {
+        transform: rotateY(900deg);
+    }
+}
+
+.match-effect-scalein {
+    animation-name: scalein;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes scalein {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.match-effect-fadeout {
+    animation-name: fadeout;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.nomatch-effect-shake {
+    animation-name: shake;
+    animation-duration: .5s;
+}
+@keyframes shake {
+    from {
+        transform: translate(-5px);
+    }
+    10% {
+        transform: translate(5px);
+    }
+    20% {
+        transform: translate(-5px);
+    }
+    30% {
+        transform: translate(5px);
+    }
+    40% {
+        transform: translate(-5px);
+    }
+    50% {
+        transform: translate(5px);
+    }
+    60% {
+        transform: translate(-5px);
+    }
+    70% {
+        transform: translate(5px);
+    }
+    80% {
+        transform: translate(-5px);
+    }
+    90% {
+        transform: translate(5px);
+    }
+    to {
+        transform: translate(0);
+    }
 }
