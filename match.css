@@ -64,24 +64,60 @@ button {
 }
 
 .grid-2x2 {
-    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.grid-2x3 {
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
 
 .grid-4x4 {
-    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.grid-4x5 {
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
 }
 
 .grid-6x6 {
-    grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
+}
+
+.grid-6x7 {
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.grid-6x8 {
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(8, 1fr);
+    gap: 5px;
+}
+
+.grid-6x9 {
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(9, 1fr);
     gap: 5px;
 }
 
 .game-card-2x2 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 30px - 36px) / 2);
+    /* 6rem for header, 30px for main (10px for gaps, 20px for margins), 36px for footer */
+}
+
+.game-card-2x3 {
     width: auto;
     height: calc(calc(100vh - 6rem - 30px - 36px) / 2);
     /* 6rem for header, 30px for main (10px for gaps, 20px for margins), 36px for footer */
@@ -93,7 +129,31 @@ button {
     /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
 }
 
+.game-card-4x5 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 50px - 36px) / 4);
+    /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
+}
+
 .game-card-6x6 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
+    /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */
+}
+
+.game-card-6x7 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
+    /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */
+}
+
+.game-card-6x8 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
+    /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */
+}
+
+.game-card-6x9 {
     width: auto;
     height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
     /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */

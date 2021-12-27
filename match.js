@@ -3,15 +3,15 @@ let DEFAULT_SIZE = 2;
 let WINNING_SCORE = DEFAULT_SIZE * DEFAULT_SIZE;
 let INTERVAL = 0;
 
-function changeGrid(size) {
-    let grids = ["grid-2x2", "grid-4x4", "grid-6x6"];
-    WINNING_SCORE = size * size;
+function changeGrid(size_r, size_c) {
+    let grids = ["grid-2x2", "grid-2x3", "grid-4x4", "grid-4x5", "grid-6x6", "grid-6x7", "grid-6x8", "grid-6x9"];
     game_board.classList.remove(...grids);
-    game_board.classList.add(`grid-${size}x${size}`);
-    resetGame(size);
+    WINNING_SCORE = size_r * size_c;
+    game_board.classList.add(`grid-${size_r}x${size_c}`);
+    resetGame(size_r, size_c);
 }
 
-function resetGame(size) {
+function resetGame(size_r, size_c) {
     document.querySelectorAll(".game-card").forEach(card => card.remove());
     document.getElementById("score").innerHTML = "000";
     document.getElementById("time").innerHTML = '<span id="minutes">00</span>:<span id="seconds">00</span>.<span id="tenths">00</span>';
@@ -21,12 +21,12 @@ function resetGame(size) {
     pause_play.innerHTML = "PAUSE";
     pause_play.classList.replace("play", "pause");
     document.getElementById("reset").setAttribute("disabled", true);
-    fetchCards(size);
-    stopWatch(size);
+    fetchCards(size_r, size_c);
+    stopWatch(size_r, size_c);
 }
 
-function fetchCards(size = DEFAULT_SIZE) {
-    fetch(`https://deckofcardsapi.com/api/deck/new/draw/?count=${size*size/2}`)
+function fetchCards(size_r = DEFAULT_SIZE, size_c = DEFAULT_SIZE) {
+    fetch(`https://deckofcardsapi.com/api/deck/new/draw/?count=${size_r*size_c/2}`)
         .then(response => {
             return response.json();
         })
@@ -36,27 +36,27 @@ function fetchCards(size = DEFAULT_SIZE) {
             fisherYatesShuffle(cards_twice);
             cards_twice.forEach((card, index) => {
                 let card_container = document.createElement("div");
-                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${size}x${size}`);
+                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${size_r}x${size_c}`);
 
                 let card_flipper = document.createElement("div");
-                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${size}x${size}`);
+                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${size_r}x${size_c}`);
 
                 let card_placer = document.createElement("img");
                 card_placer.setAttribute("src", "./joker.png");
                 card_placer.setAttribute("alt", "back image of card");
-                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${size}x${size}`);
+                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${size_r}x${size_c}`);
                 
                 let card_back_image = document.createElement("img");
                 card_back_image.setAttribute("src", "./joker.png");
                 card_back_image.setAttribute("alt", "back image of card");
-                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${size}x${size}`);
-                card_back_image.setAttribute("onclick", `flip(event, ${size});`);
+                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${size_r}x${size_c}`);
+                card_back_image.setAttribute("onclick", `flip(event, ${size_r}, ${size_c});`);
 
                 let card_front_image = document.createElement("img");
                 card_front_image.setAttribute("src", card.image);
                 card_front_image.setAttribute("alt", card.code);
                 card_front_image.setAttribute("name", card.code);
-                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${size}x${size}`);
+                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${size_r}x${size_c}`);
 
                 card_container.append(card_flipper);
                 card_flipper.append(card_placer);
@@ -78,7 +78,7 @@ function fisherYatesShuffle(array) {
     }
 }
 
-function flip(event, size) {
+function flip(event, size_r, size_c) {
     let moves = document.getElementById("moves").innerHTML;
     moves = String(Number(moves) + 1);
     document.getElementById("moves").innerHTML = moves.padStart(3, "0");
@@ -89,17 +89,16 @@ function flip(event, size) {
     flip.classList.add("flipped-card");
 
     let all_flipped = document.querySelectorAll(".flipped-card");
-    if (all_flipped.length === 2) setTimeout(checkMatch, 1000, all_flipped, size);
+    if (all_flipped.length === 2) setTimeout(checkMatch, 1000, all_flipped, size_r, size_c);
 }
 
-function checkMatch(all_flipped, size) {
+function checkMatch(all_flipped, size_r, size_c) {
     let cards = [];
     all_flipped.forEach(card => {
         let {lastChild} = card;
         cards.push(lastChild.name);
     });
     if (cards[0] === cards[1]) {
-        // console.log(all_flipped);
         all_flipped.forEach(card => {
             card.classList.replace("flipped-card", "matched-card");
             card.classList.add("match-effect-spin");
@@ -126,7 +125,7 @@ function removeClass(object, remove_class) {
     object.classList.remove(remove_class);
 }
 
-function youWin(size) {
+function youWin(size_r, size_c) {
     clearInterval(INTERVAL);
     let winning_box = document.getElementById("winning-box");
     winning_box.style.display = "block";
@@ -137,7 +136,7 @@ function youWin(size) {
     let replay = document.getElementById("replay");
     replay.removeAttribute("disabled");
     replay.onclick = () => {
-        resetGame(size);
+        resetGame(size_r, size_c);
         winning_box.style.display = "none";
     }
     let close = document.getElementById("close-winning");
@@ -147,13 +146,13 @@ function youWin(size) {
     }
 }
 
-function youLose(size) {
+function youLose(size_r, size_c) {
     clearInterval(INTERVAL);
     let losing_box = document.getElementById("losing-box");
     losing_box.style.display = "block";
     let close = document.getElementById("close-losing");
     close.onclick = () => {
-        resetGame(size);
+        resetGame(size_r, size_c);
         losing_box.style.display = "none";
     }
 }
@@ -215,7 +214,7 @@ function stopWatch(size) {
 
     reset.onclick = () => {
         stop();
-        resetGame(size);
+        resetGame(size_r, size_c);
     }
 }
 
