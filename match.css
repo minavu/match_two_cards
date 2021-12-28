@@ -310,3 +310,17 @@ button {
         transform: translate(0);
     }
 }
+
+.highlightbg-effect {
+    animation-name: highlightbg;
+    animation-duration: 0.5s;
+    animation-iteration-count: 4;
+}
+
+@keyframes highlightbg {
+    50% {
+        background-color: yellow;
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+}

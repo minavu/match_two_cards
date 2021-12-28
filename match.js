@@ -39,18 +39,33 @@ function resetGame() {
 }
 
 function fetchMovieCards() {
-    fetch(`https://imdb-api.com/en/API/MostPopularMovies/k_68k3xnp8`)
+    let api_key = "5941d4436aff4a93f3f11e86cb336bec";
+    let config;
+    fetch(`https://api.themoviedb.org/3/configuration?api_key=${api_key}`)
         .then(response => {
             return response.json();
         })
         .then(data => {
-            let {items} = data;
-            fisherYatesShuffle(items);
-            let cards = items.slice(0, curr_grid_row*curr_grid_col/2);
+            config = {...data};
+            return data;
+        })
+        .catch(error => {
+            console.error(error);
+        })
+    ;
+    fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${api_key}&language=en-US&page=1`)
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            let {results} = data;
+            fisherYatesShuffle(results);
+            let cards = results.slice(0, curr_grid_row*curr_grid_col/2);
             let cards_twice = [...cards, ...cards];
-            // console.log(cards_twice);
             fisherYatesShuffle(cards_twice);
             cards_twice.forEach((card, index) => {
+                let image = config.images.secure_base_url + config.images.poster_sizes[3] + card.poster_path;
+
                 let card_container = document.createElement("div");
                 card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${curr_grid_row}x${curr_grid_col}`);
 
@@ -69,7 +84,7 @@ function fetchMovieCards() {
                 card_back_image.setAttribute("onclick", `flip(event);`);
 
                 let card_front_image = document.createElement("img");
-                card_front_image.setAttribute("src", card.image);
+                card_front_image.setAttribute("src", image);
                 card_front_image.setAttribute("alt", card.title);
                 card_front_image.setAttribute("name", card.id);
                 card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${curr_grid_row}x${curr_grid_col}`);
@@ -88,7 +103,8 @@ function fetchMovieCards() {
 }
 
 function fetchPokemonCards() {
-    fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp1&pageSize=${curr_grid_row*curr_grid_col/2}`, {
+    let random_number = Math.floor(Math.random() * 7) + 1;
+    fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp${random_number}&pageSize=${curr_grid_row*curr_grid_col/2}`, {
             method: "GET",
             headers: {
                 "X-Api-Key": "66fc5e9e-c1e7-4ebe-8b04-d30a2734cf4c",
@@ -221,6 +237,8 @@ function checkMatch(all_flipped) {
         let score = document.getElementById("score").innerHTML;
         score = String(Number(score) + 2);
         document.getElementById("score").innerHTML = score.padStart(3, "0");
+        document.getElementById("score").classList.add("highlightbg-effect");
+        setTimeout(() => document.getElementById("score").classList.remove("highlightbg-effect"), 2000);
         if (Number(score) === WINNING_SCORE) {
             setTimeout(youWin, 3500);
         }
