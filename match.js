@@ -34,7 +34,57 @@ function resetGame() {
     document.getElementById("reset").setAttribute("disabled", true);
     if (curr_deck === "playing") fetchPlayingCards();
     if (curr_deck === "pokemon") fetchPokemonCards();
+    if (curr_deck === "movie") fetchMovieCards();
     stopWatch();
+}
+
+function fetchMovieCards() {
+    fetch(`https://imdb-api.com/en/API/MostPopularMovies/k_68k3xnp8`)
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            let {items} = data;
+            fisherYatesShuffle(items);
+            let cards = items.slice(0, curr_grid_row*curr_grid_col/2);
+            let cards_twice = [...cards, ...cards];
+            // console.log(cards_twice);
+            fisherYatesShuffle(cards_twice);
+            cards_twice.forEach((card, index) => {
+                let card_container = document.createElement("div");
+                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${curr_grid_row}x${curr_grid_col}`);
+
+                let card_flipper = document.createElement("div");
+                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${curr_grid_row}x${curr_grid_col}`);
+
+                let card_placer = document.createElement("img");
+                card_placer.setAttribute("src", "./images/movie.png");
+                card_placer.setAttribute("alt", "back image of card");
+                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${curr_grid_row}x${curr_grid_col}`);
+                
+                let card_back_image = document.createElement("img");
+                card_back_image.setAttribute("src", "./images/movie.png");
+                card_back_image.setAttribute("alt", "back image of card");
+                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${curr_grid_row}x${curr_grid_col}`);
+                card_back_image.setAttribute("onclick", `flip(event);`);
+
+                let card_front_image = document.createElement("img");
+                card_front_image.setAttribute("src", card.image);
+                card_front_image.setAttribute("alt", card.title);
+                card_front_image.setAttribute("name", card.id);
+                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${curr_grid_row}x${curr_grid_col}`);
+
+                card_container.append(card_flipper);
+                card_flipper.append(card_placer);
+                card_flipper.append(card_back_image);
+                card_flipper.append(card_front_image);
+                game_board.append(card_container);
+            })
+        })
+        .catch(error => {
+            console.error("Request failed", error)
+        })
+    ;
 }
 
 function fetchPokemonCards() {

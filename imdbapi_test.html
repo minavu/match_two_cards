@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMDB API Test</title>
+</head>
+<body>
+    <section id="card"></section>
+    <script>
+        let saved = [];
+        fetch(`https://imdb-api.com/en/API/MostPopularMovies/k_68k3xnp8`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                let {items} = data;
+                items.forEach(card => {
+                    saved.push(card);
+                });
+                print();
+                return data;
+            })
+            .catch(error => {
+                console.error("Request failed", error)
+            })
+        ;
+        function print() {
+            saved.forEach(card => {
+                console.log(card);
+                // let imageID = card.image.split("/").pop();
+                // let image = `https://imdb-api.com/Images/384x528/${imageID}`;
+                // let image = card.image.replace("M", "original");
+                // console.log(image);
+                let card_image = document.createElement("img");
+                card_image.setAttribute("src", card.image);
+                card_image.setAttribute("alt", card.title);
+                card_image.setAttribute("name", card.id);
+                card_image.setAttribute("class", "game-card");
+                document.getElementById("card").append(card_image);
+            });
+        }
+    </script>
+</body>
+</html>
