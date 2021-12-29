@@ -217,7 +217,12 @@ function flip(event) {
     flip.classList.add("flipped-card");
 
     let all_flipped = document.querySelectorAll(".flipped-card");
-    if (all_flipped.length === 2) setTimeout(checkMatch, 1000, all_flipped);
+    if (all_flipped.length === 2) {
+        setTimeout(checkMatch, 1000, all_flipped);
+        document.querySelectorAll(".game-card-back").forEach(card => card.removeAttribute("onclick"));
+        setTimeout(() => document.querySelectorAll(".game-card-back").forEach(card => card.setAttribute("onclick", `flip(event);`)), 1000);
+    }
+    
 }
 
 function checkMatch(all_flipped) {
