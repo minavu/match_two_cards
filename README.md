@@ -5,6 +5,6 @@ When a match is found, the player scores two points.
 The game is over when the player matches all cards on the screen.
 
 APIs Used:
-The Movie Database API
-Deck of Cards API
-Pokemon TCG API
+- The Movie Database API
+- Deck of Cards API
+- Pokemon TCG API
