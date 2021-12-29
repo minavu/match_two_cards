@@ -1,8 +1,8 @@
 let game_board = document.getElementById("game-board");
+let INTERVAL = 0;
 let DEFAULT_DECK = "playing";
 let DEFAULT_SIZE = 2;
 let WINNING_SCORE = DEFAULT_SIZE * DEFAULT_SIZE;
-let INTERVAL = 0;
 let curr_grid_row = DEFAULT_SIZE;
 let curr_grid_col = DEFAULT_SIZE;
 let curr_deck = DEFAULT_DECK;
@@ -24,6 +24,7 @@ function changeGrid(size_r, size_c) {
         "grid-4x2", 
         "grid-4x3",
         "grid-4x4", 
+        "grid-4x5", 
         "grid-4x6", 
         "grid-4x8"
     ];
@@ -49,7 +50,6 @@ function resetGame() {
     pause_play.classList.replace("play", "pause");
     document.getElementById("reset").setAttribute("disabled", true);
     fetchCards();
-    stopWatch();
 }
 
 function fetchPlayingData() {
@@ -196,11 +196,8 @@ function fetchCards() {
         card_flipper.append(card_front_image);
         game_board.append(card_container);
     })
+    stopWatch();
 }
-
-fetchPlayingData();
-fetchPokemonData();
-fetchMovieData();
 
 function fisherYatesShuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -281,8 +278,8 @@ function youLose() {
     losing_box.style.display = "block";
     let close = document.getElementById("close-losing");
     close.onclick = () => {
-        resetGame();
         losing_box.style.display = "none";
+        resetGame();
     }
 }
 
@@ -347,5 +344,7 @@ function stopWatch() {
     }
 }
 
-setTimeout(() => fetchCards(), 500);
-stopWatch();
+fetchPlayingData();
+fetchPokemonData();
+fetchMovieData();
+setTimeout(() => fetchCards(), 1000);

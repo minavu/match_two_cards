@@ -171,6 +171,18 @@ button {
     /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
 }
 
+.grid-4x5 {
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+}
+
+.game-card-4x5 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 50px - 36px) / 4);
+    /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
+}
+
 .grid-4x6 {
     grid-template-rows: repeat(4, 1fr);
     grid-template-columns: repeat(6, 1fr);
@@ -209,6 +221,7 @@ button {
 
 .game-card-container {
     perspective: 1000px;
+    margin: auto;
 }
 
 .game-card-flipper {
@@ -376,36 +389,81 @@ button {
 
 /* LAPTOP */
 @media screen and (min-width: 769px) {
+    .choose {
+        display: none;
+    }
     .laptop {
         display: block;
     }
-    .tablet, .mobile {
+    .tablet {
         display: none;
     }
 }
 
 /* TABLET */
-@media screen and (min-width: 426px) and (max-width: 768px) {
+@media screen and (max-width: 768px) {
     h1 {
         font-size: 1.5rem;
     }
-    .tablet {
-        display: block;
+    .choose {
+        display: none;
     }
-    .laptop, .mobile {
+    .laptop {
         display: none;
     }
 }
 
 /* MOBILE LARGE */
 @media screen and (max-width: 425px) {
+    header {
+        margin: 5px;
+    }
+    main {
+        flex-direction: column;
+        margin: 0;
+    }
+    footer {
+        display: none;
+    }
     h1 {
         font-size: 1.3rem;
+        padding: 5px;
     }
-    .mobile {
-        display: block;
+    h3 {
+        font-size: 1.1rem;
+        padding: 3px;
     }
-    .laptop, .tablet {
+    #left-section, #right-section {
+        width: 100%;
+        text-align: center;
+        margin: 5px;
+    }
+    #left-section *, #right-section * {
+        text-align: center;
+    }
+    .choose {
+        display: inline-block;
+        margin: 0 5px;
+    }
+    .keeps {
+        display: inline-block;
+        margin: 0 15px;
+    }
+    .keeps.btn {
         display: none;
+    }
+    #game-board {
+        width: 100%;
+        height: auto;
+    }
+    .not-mobile {
+        display: none;
+    }
+    .grid-2x2, .grid-3x2, .grid-4x3, .grid-4x4 {
+        gap: 5px;
+    }
+    .game-card-2x2, .grid-3x2, .grid-4x3, .game-card-4x4 {
+        width: 100%;
+        height: auto;
     }
 }
