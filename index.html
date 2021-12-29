@@ -22,14 +22,34 @@
                 <p><a href="#" onclick="changeDeck('pokemon')">Pokemon Cards</a></p>
                 <p><a href="#" onclick="changeDeck('movie')">Movie Cards</a></p>
                 <h3>Choose Grid:</h3>
-                <p><a href="#" onclick="changeGrid(2, 2);">2 x 2</a></p>
-                <p><a href="#" onclick="changeGrid(2, 3);">2 x 3</a></p>
-                <p><a href="#" onclick="changeGrid(4, 4);">4 x 4</a></p>
-                <p><a href="#" onclick="changeGrid(4, 5);">4 x 5</a></p>
-                <p><a href="#" onclick="changeGrid(6, 6);">6 x 6</a></p>
-                <p><a href="#" onclick="changeGrid(6, 7);">6 x 7</a></p>
-                <p><a href="#" onclick="changeGrid(6, 8);">6 x 8</a></p>
-                <p><a href="#" onclick="changeGrid(6, 9);">6 x 9</a></p>
+
+                <!-- Mobile -->
+                <section class="mobile">
+                    <p><a href="#" onclick="changeGrid(2, 2);">2 x 2</a></p>
+                    <p><a href="#" onclick="changeGrid(3, 2);">3 x 2</a></p>
+                    <p><a href="#" onclick="changeGrid(4, 2);">4 x 2</a></p>
+                    <p><a href="#" onclick="changeGrid(4, 3);">4 x 3</a></p>
+                </section>
+
+                <!-- Tablet -->
+                <section class="tablet">
+                    <p><a href="#" onclick="changeGrid(2, 2);">2 x 2</a></p>
+                    <p><a href="#" onclick="changeGrid(2, 3);">2 x 3</a></p>
+                    <p><a href="#" onclick="changeGrid(3, 4);">3 x 4</a></p>
+                    <p><a href="#" onclick="changeGrid(4, 4);">4 x 4</a></p>
+                </section>
+
+                <!-- Laptop -->
+                <section class="laptop">
+                    <p><a href="#" onclick="changeGrid(2, 2);">2 x 2</a></p>
+                    <p><a href="#" onclick="changeGrid(2, 3);">2 x 3</a></p>
+                    <p><a href="#" onclick="changeGrid(2, 4);">2 x 4</a></p>
+                    <p><a href="#" onclick="changeGrid(3, 4);">3 x 4</a></p>
+                    <p><a href="#" onclick="changeGrid(3, 6);">3 x 6</a></p>
+                    <p><a href="#" onclick="changeGrid(4, 6);">4 x 6</a></p>
+                    <p><a href="#" onclick="changeGrid(4, 8);">4 x 8</a></p>
+                </section>
+                
             </section>
             <section id="game-board" class="grid-2x2"></section>
             <section id="right-section">
@@ -44,7 +64,7 @@
             </section>
         </main>
         <footer>
-            <p>Developer:  Mina Vu | mina.vu@pdx.edu</p>
+            <p>Developer:  Mina Vu</p>
         </footer>
         
         <section id="winning-box">

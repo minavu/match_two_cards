@@ -15,9 +15,9 @@
                 "X-Api-Key": "66fc5e9e-c1e7-4ebe-8b04-d30a2734cf4c",
             }
         }
-        // fetch(`https://api.pokemontcg.io/v2/sets`, options)
         let random_number = Math.floor(Math.random() * 7) + 1;
-        fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp${random_number}&pageSize=10`, options)
+        // fetch(`https://api.pokemontcg.io/v2/sets`, options)
+        fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp1&pageSize=250`, options)
             .then(response => {
                 return response.json();
             })

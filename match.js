@@ -6,11 +6,27 @@ let INTERVAL = 0;
 let curr_grid_row = DEFAULT_SIZE;
 let curr_grid_col = DEFAULT_SIZE;
 let curr_deck = DEFAULT_DECK;
+let playing_saved_list = [];
+let pokemon_saved_list = [];
+let movie_saved_list = [];
+let movie_images_config;
 
 function changeGrid(size_r, size_c) {
     curr_grid_row = size_r;
     curr_grid_col = size_c;
-    let grids = ["grid-2x2", "grid-2x3", "grid-4x4", "grid-4x5", "grid-6x6", "grid-6x7", "grid-6x8", "grid-6x9"];
+    let grids = [
+        "grid-2x2",
+        "grid-2x3", 
+        "grid-2x4",
+        "grid-3x2",
+        "grid-3x4", 
+        "grid-3x6", 
+        "grid-4x2", 
+        "grid-4x3",
+        "grid-4x4", 
+        "grid-4x6", 
+        "grid-4x8"
+    ];
     game_board.classList.remove(...grids);
     game_board.classList.add(`grid-${curr_grid_row}x${curr_grid_col}`);
     WINNING_SCORE = curr_grid_row * curr_grid_col;
@@ -32,68 +48,24 @@ function resetGame() {
     pause_play.innerHTML = "PAUSE";
     pause_play.classList.replace("play", "pause");
     document.getElementById("reset").setAttribute("disabled", true);
-    if (curr_deck === "playing") fetchPlayingCards();
-    if (curr_deck === "pokemon") fetchPokemonCards();
-    if (curr_deck === "movie") fetchMovieCards();
+    fetchCards();
     stopWatch();
 }
 
-function fetchMovieCards() {
-    let api_key = "5941d4436aff4a93f3f11e86cb336bec";
-    let config;
-    fetch(`https://api.themoviedb.org/3/configuration?api_key=${api_key}`)
+function fetchPlayingData() {
+    fetch(`https://deckofcardsapi.com/api/deck/new/draw/?count=52`)
         .then(response => {
             return response.json();
         })
         .then(data => {
-            config = {...data};
-            return data;
-        })
-        .catch(error => {
-            console.error(error);
-        })
-    ;
-    fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${api_key}&language=en-US&page=1`)
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            let {results} = data;
-            fisherYatesShuffle(results);
-            let cards = results.slice(0, curr_grid_row*curr_grid_col/2);
-            let cards_twice = [...cards, ...cards];
-            fisherYatesShuffle(cards_twice);
-            cards_twice.forEach((card, index) => {
-                let image = config.images.secure_base_url + config.images.poster_sizes[3] + card.poster_path;
-
-                let card_container = document.createElement("div");
-                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${curr_grid_row}x${curr_grid_col}`);
-
-                let card_flipper = document.createElement("div");
-                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${curr_grid_row}x${curr_grid_col}`);
-
-                let card_placer = document.createElement("img");
-                card_placer.setAttribute("src", "./images/movie.png");
-                card_placer.setAttribute("alt", "back image of card");
-                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${curr_grid_row}x${curr_grid_col}`);
-                
-                let card_back_image = document.createElement("img");
-                card_back_image.setAttribute("src", "./images/movie.png");
-                card_back_image.setAttribute("alt", "back image of card");
-                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${curr_grid_row}x${curr_grid_col}`);
-                card_back_image.setAttribute("onclick", `flip(event);`);
-
-                let card_front_image = document.createElement("img");
-                card_front_image.setAttribute("src", image);
-                card_front_image.setAttribute("alt", card.title);
-                card_front_image.setAttribute("name", card.id);
-                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${curr_grid_row}x${curr_grid_col}`);
-
-                card_container.append(card_flipper);
-                card_flipper.append(card_placer);
-                card_flipper.append(card_back_image);
-                card_flipper.append(card_front_image);
-                game_board.append(card_container);
+            let {cards} = data;
+            cards.forEach(result => {
+                let card = {
+                    id: result.code,
+                    title: result.value + " of " + result.suit,
+                    image: result.image
+                }
+                playing_saved_list.push(card);
             })
         })
         .catch(error => {
@@ -102,9 +74,8 @@ function fetchMovieCards() {
     ;
 }
 
-function fetchPokemonCards() {
-    let random_number = Math.floor(Math.random() * 7) + 1;
-    fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp${random_number}&pageSize=${curr_grid_row*curr_grid_col/2}`, {
+function fetchPokemonData() {
+    fetch(`https://api.pokemontcg.io/v2/cards?q=set.id:dp1&pageSize=100`, {
             method: "GET",
             headers: {
                 "X-Api-Key": "66fc5e9e-c1e7-4ebe-8b04-d30a2734cf4c",
@@ -115,37 +86,13 @@ function fetchPokemonCards() {
         })
         .then(response => {
             let {data} = response;
-            let cards_twice = [...data, ...data];
-            fisherYatesShuffle(cards_twice);
-            cards_twice.forEach((card, index) => {
-                let card_container = document.createElement("div");
-                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${curr_grid_row}x${curr_grid_col}`);
-
-                let card_flipper = document.createElement("div");
-                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${curr_grid_row}x${curr_grid_col}`);
-
-                let card_placer = document.createElement("img");
-                card_placer.setAttribute("src", "./images/pokemon.png");
-                card_placer.setAttribute("alt", "back image of card");
-                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${curr_grid_row}x${curr_grid_col}`);
-                
-                let card_back_image = document.createElement("img");
-                card_back_image.setAttribute("src", "./images/pokemon.png");
-                card_back_image.setAttribute("alt", "back image of card");
-                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${curr_grid_row}x${curr_grid_col}`);
-                card_back_image.setAttribute("onclick", `flip(event);`);
-
-                let card_front_image = document.createElement("img");
-                card_front_image.setAttribute("src", card.images.small);
-                card_front_image.setAttribute("alt", card.name);
-                card_front_image.setAttribute("name", card.id);
-                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${curr_grid_row}x${curr_grid_col}`);
-
-                card_container.append(card_flipper);
-                card_flipper.append(card_placer);
-                card_flipper.append(card_back_image);
-                card_flipper.append(card_front_image);
-                game_board.append(card_container);
+            data.forEach(result => {
+                let pokemon = {
+                    id: result.id,
+                    title: result.name,
+                    image: result.images.small
+                }
+                pokemon_saved_list.push(pokemon);
             })
         })
         .catch(error => {
@@ -154,51 +101,106 @@ function fetchPokemonCards() {
     ;
 }
 
-function fetchPlayingCards() {
-    fetch(`https://deckofcardsapi.com/api/deck/new/draw/?count=${curr_grid_row*curr_grid_col/2}`)
+function fetchMovieData() {
+    let movie_api_key = "5941d4436aff4a93f3f11e86cb336bec";
+    fetch(`https://api.themoviedb.org/3/configuration?api_key=${movie_api_key}`)
         .then(response => {
             return response.json();
         })
         .then(data => {
-            let {cards} = data;
-            let cards_twice = [...cards, ...cards];
-            fisherYatesShuffle(cards_twice);
-            cards_twice.forEach((card, index) => {
-                let card_container = document.createElement("div");
-                card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${curr_grid_row}x${curr_grid_col}`);
-
-                let card_flipper = document.createElement("div");
-                card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${curr_grid_row}x${curr_grid_col}`);
-
-                let card_placer = document.createElement("img");
-                card_placer.setAttribute("src", "./images/joker.png");
-                card_placer.setAttribute("alt", "back image of card");
-                card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${curr_grid_row}x${curr_grid_col}`);
-                
-                let card_back_image = document.createElement("img");
-                card_back_image.setAttribute("src", "./images/joker.png");
-                card_back_image.setAttribute("alt", "back image of card");
-                card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${curr_grid_row}x${curr_grid_col}`);
-                card_back_image.setAttribute("onclick", `flip(event);`);
-
-                let card_front_image = document.createElement("img");
-                card_front_image.setAttribute("src", card.image);
-                card_front_image.setAttribute("alt", card.code);
-                card_front_image.setAttribute("name", card.code);
-                card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${curr_grid_row}x${curr_grid_col}`);
-
-                card_container.append(card_flipper);
-                card_flipper.append(card_placer);
-                card_flipper.append(card_back_image);
-                card_flipper.append(card_front_image);
-                game_board.append(card_container);
-            })
+            movie_images_config = {...data};
+            getMovies();
+            return data;
         })
         .catch(error => {
-            console.error("Request failed", error)
+            console.error(error);
         })
     ;
+    const getMovies = () => {
+        for (let i = 1; i <= 2; i++) {
+            fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${movie_api_key}&language=en-US&page=${i}`)
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    let {results} = data;
+                    results.forEach(result => {
+                        let movie = {
+                            id: result.id,
+                            title: result.title,
+                            image: movie_images_config.images.secure_base_url + movie_images_config.images.poster_sizes[3] + result.poster_path,
+                        }
+                        movie_saved_list.push(movie);
+                    })
+                    return data;
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+            ;
+        }
+    }
 }
+
+function fetchCards() {
+    let cards;
+    let back_image;
+    switch (curr_deck) {
+        case "playing":
+            fisherYatesShuffle(playing_saved_list);
+            cards = playing_saved_list.slice(0, curr_grid_row*curr_grid_col/2);
+            back_image = "./images/joker.png";
+            break;
+        case "pokemon":
+            fisherYatesShuffle(pokemon_saved_list);
+            cards = pokemon_saved_list.slice(0, curr_grid_row*curr_grid_col/2);
+            back_image = "./images/pokemon.png";
+            break;
+        case "movie":
+            fisherYatesShuffle(movie_saved_list);
+            cards = movie_saved_list.slice(0, curr_grid_row*curr_grid_col/2);
+            back_image = "./images/movie.png";
+            break;
+        default:
+            console.log(`An unexpected error occurred.  Current deck is ${curr_deck}`);
+    }
+    let cards_twice = [...cards, ...cards];
+    fisherYatesShuffle(cards_twice);
+    cards_twice.forEach((card, index) => {
+        let card_container = document.createElement("div");
+        card_container.setAttribute("class", `id-${index} game-card game-card-container game-card-${curr_grid_row}x${curr_grid_col}`);
+
+        let card_flipper = document.createElement("div");
+        card_flipper.setAttribute("class", `id-${index} game-card-flipper game-card-${curr_grid_row}x${curr_grid_col}`);
+
+        let card_placer = document.createElement("img");
+        card_placer.setAttribute("src", back_image);
+        card_placer.setAttribute("alt", "back image of card");
+        card_placer.setAttribute("class", `id-${index} game-card-placer game-card-${curr_grid_row}x${curr_grid_col}`);
+        
+        let card_back_image = document.createElement("img");
+        card_back_image.setAttribute("src", back_image);
+        card_back_image.setAttribute("alt", "back image of card");
+        card_back_image.setAttribute("class", `id-${index} game-card-back game-card-${curr_grid_row}x${curr_grid_col}`);
+        card_back_image.setAttribute("onclick", `flip(event);`);
+
+        let card_front_image = document.createElement("img");
+        card_front_image.setAttribute("src", card.image);
+        card_front_image.setAttribute("alt", card.title);
+        card_front_image.setAttribute("name", card.id);
+        card_front_image.setAttribute("class", `id-${index} game-card-front game-card-${curr_grid_row}x${curr_grid_col}`);
+
+        card_container.append(card_flipper);
+        card_flipper.append(card_placer);
+        card_flipper.append(card_back_image);
+        card_flipper.append(card_front_image);
+        game_board.append(card_container);
+    })
+}
+
+fetchPlayingData();
+fetchPokemonData();
+fetchMovieData();
 
 function fisherYatesShuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -246,14 +248,10 @@ function checkMatch(all_flipped) {
         all_flipped.forEach(card => {
             card.classList.remove("flipped-card");
             card.classList.add("nomatch-effect-shake");
-            setTimeout(removeClass, 500, card, "nomatch-effect-shake");
+            setTimeout(() => card.classList.remove("nomatch-effect-shake"), 500);
             card.style.transform = "rotateY(0deg)";
         });
     }
-}
-
-function removeClass(object, remove_class) {
-    object.classList.remove(remove_class);
 }
 
 function youWin() {
@@ -349,5 +347,5 @@ function stopWatch() {
     }
 }
 
-fetchPlayingCards();
+setTimeout(() => fetchCards(), 500);
 stopWatch();

@@ -7,7 +7,7 @@
 }
 
 h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bold;
     padding: 10px;
 }
@@ -69,52 +69,16 @@ button {
     gap: 10px;
 }
 
-.grid-2x3 {
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-.grid-4x4 {
-    grid-template-rows: repeat(4, 1fr);
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-}
-
-.grid-4x5 {
-    grid-template-rows: repeat(4, 1fr);
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-}
-
-.grid-6x6 {
-    grid-template-rows: repeat(6, 1fr);
-    grid-template-columns: repeat(6, 1fr);
-    gap: 5px;
-}
-
-.grid-6x7 {
-    grid-template-rows: repeat(6, 1fr);
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-}
-
-.grid-6x8 {
-    grid-template-rows: repeat(6, 1fr);
-    grid-template-columns: repeat(8, 1fr);
-    gap: 5px;
-}
-
-.grid-6x9 {
-    grid-template-rows: repeat(6, 1fr);
-    grid-template-columns: repeat(9, 1fr);
-    gap: 5px;
-}
-
 .game-card-2x2 {
     width: auto;
     height: calc(calc(100vh - 6rem - 30px - 36px) / 2);
     /* 6rem for header, 30px for main (10px for gaps, 20px for margins), 36px for footer */
+}
+
+.grid-2x3 {
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
 }
 
 .game-card-2x3 {
@@ -123,37 +87,121 @@ button {
     /* 6rem for header, 30px for main (10px for gaps, 20px for margins), 36px for footer */
 }
 
+.grid-2x4 {
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.game-card-2x4 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 30px - 36px) / 2);
+    /* 6rem for header, 30px for main (10px for gaps, 20px for margins), 36px for footer */
+}
+
+.grid-3x2 {
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.game-card-3x2 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 40px - 36px) / 3);
+    /* 6rem for header, 30px for main (20px for gaps, 20px for margins), 36px for footer */
+}
+
+.grid-3x4 {
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.game-card-3x4 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 40px - 36px) / 3);
+    /* 6rem for header, 30px for main (20px for gaps, 20px for margins), 36px for footer */
+}
+
+.grid-3x6 {
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+
+.game-card-3x6 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 40px - 36px) / 3);
+    /* 6rem for header, 30px for main (20px for gaps, 20px for margins), 36px for footer */
+}
+
+.grid-4x2 {
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.game-card-4x2 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 50px - 36px) / 4);
+    /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
+}
+
+.grid-4x3 {
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.game-card-4x3 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 50px - 36px) / 4);
+    /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
+}
+
+.grid-4x4 {
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
 .game-card-4x4 {
     width: auto;
     height: calc(calc(100vh - 6rem - 50px - 36px) / 4);
     /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
 }
 
-.game-card-4x5 {
+.grid-4x6 {
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+}
+
+.game-card-4x6 {
     width: auto;
     height: calc(calc(100vh - 6rem - 50px - 36px) / 4);
     /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
 }
 
+.grid-4x8 {
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+}
+
+.game-card-4x8 {
+    width: auto;
+    height: calc(calc(100vh - 6rem - 50px - 36px) / 4);
+    /* 6rem for header, 50px for main (30px for gaps, 20px for margins), 36px for footer */
+}
+
+.grid-6x6 {
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5px;
+}
+
 .game-card-6x6 {
-    width: auto;
-    height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
-    /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */
-}
-
-.game-card-6x7 {
-    width: auto;
-    height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
-    /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */
-}
-
-.game-card-6x8 {
-    width: auto;
-    height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
-    /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */
-}
-
-.game-card-6x9 {
     width: auto;
     height: calc(calc(100vh - 6rem - 45px - 36px) / 6);
     /* 6rem for header, 45px for main (25px gaps, 20px for margins), 36px for footer */
@@ -275,6 +323,7 @@ button {
     animation-name: shake;
     animation-duration: .5s;
 }
+
 @keyframes shake {
     from {
         transform: translate(-5px);
@@ -322,5 +371,41 @@ button {
         background-color: yellow;
         font-weight: bold;
         font-size: 1.5rem;
+    }
+}
+
+/* LAPTOP */
+@media screen and (min-width: 769px) {
+    .laptop {
+        display: block;
+    }
+    .tablet, .mobile {
+        display: none;
+    }
+}
+
+/* TABLET */
+@media screen and (min-width: 426px) and (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    .tablet {
+        display: block;
+    }
+    .laptop, .mobile {
+        display: none;
+    }
+}
+
+/* MOBILE LARGE */
+@media screen and (max-width: 425px) {
+    h1 {
+        font-size: 1.3rem;
+    }
+    .mobile {
+        display: block;
+    }
+    .laptop, .tablet {
+        display: none;
     }
 }
