@@ -431,7 +431,7 @@ button {
     }
     main {
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-evenly;
         margin: 0;
         padding: 0 5px;
     }
