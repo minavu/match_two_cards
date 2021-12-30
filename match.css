@@ -433,14 +433,14 @@ button {
         flex-direction: column;
         justify-content: space-evenly;
         margin: 0;
-        padding: 0 5px;
+        padding: 0 5px 5px;
     }
     footer {
         display: none;
     }
     h1 {
         font-size: 1.3rem;
-        padding: 5px;
+        padding: 5px 5px 10px;
     }
     h3 {
         font-size: 1.1rem;
