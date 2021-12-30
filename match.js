@@ -220,7 +220,7 @@ function flip(event) {
     if (all_flipped.length === 2) {
         setTimeout(checkMatch, 1000, all_flipped);
         document.querySelectorAll(".game-card-back").forEach(card => card.removeAttribute("onclick"));
-        setTimeout(() => document.querySelectorAll(".game-card-back").forEach(card => card.setAttribute("onclick", `flip(event);`)), 1000);
+        setTimeout(() => document.querySelectorAll(".game-card-back").forEach(card => card.setAttribute("onclick", `flip(event);`)), 750);
     }
     
 }
@@ -264,12 +264,14 @@ function youWin() {
     document.getElementById("winning-score").innerHTML = document.getElementById("score").innerHTML;
     document.getElementById("winning-time").innerHTML = document.getElementById("time").innerHTML;
     document.getElementById("winning-moves").innerHTML = document.getElementById("moves").innerHTML;
-    let replay = document.getElementById("replay");
-    replay.removeAttribute("disabled");
-    replay.onclick = () => {
-        resetGame();
-        winning_box.style.display = "none";
-    }
+    let replays = document.querySelectorAll(".replay");
+    replays.forEach(replay => {
+        replay.removeAttribute("disabled");
+        replay.onclick = () => {
+            resetGame();
+            winning_box.style.display = "none";
+        }
+    })
     let close = document.getElementById("close-winning");
     close.onclick = () => {
         document.getElementById("pause-play").setAttribute("disabled", true);
@@ -281,6 +283,14 @@ function youLose() {
     clearInterval(INTERVAL);
     let losing_box = document.getElementById("losing-box");
     losing_box.style.display = "block";
+    let replays = document.querySelectorAll(".replay");
+    replays.forEach(replay => {
+        replay.removeAttribute("disabled");
+        replay.onclick = () => {
+            losing_box.style.display = "none";
+            resetGame();
+        }
+    })
     let close = document.getElementById("close-losing");
     close.onclick = () => {
         losing_box.style.display = "none";
@@ -309,7 +319,7 @@ function stopWatch() {
             secs = 0;
         }
         if (mins === 60 && tens > 0) {
-            youLose(size);
+            youLose();
         }
         tenths.innerHTML = String(tens).padStart(2, "0");
         seconds.innerHTML = String(secs).padStart(2, "0");

@@ -262,20 +262,31 @@ button {
 
 #winning-box, #losing-box {
     position: absolute;
-    top: 6rem;
     width: 100%;
-    height: calc(100vh - 6rem);
+    height: 100%;
     display: none;
 }
 
 #winning-message, #losing-message {
     position: relative;
     width: fit-content;
-    margin: auto;
-    padding: 10px 55px 25px;
-    background-color: beige;
-    border: 2px solid rgb(139, 139, 127);
+    margin: 6rem auto;
+    padding: 15px 55px 25px;
     text-align: center;
+}
+
+#winning-message {
+    background-color: rgb(255, 255, 195);
+    border: 2px solid rgb(139, 139, 127);    
+}
+
+#losing-message {
+    background-color: rgb(255, 171, 157);
+    border: 2px solid rgb(255, 0, 0);
+}
+
+#winning-message p, #losing-message p {
+    padding: 10px;
 }
 
 .match-effect-spin {
@@ -420,6 +431,7 @@ button {
     }
     main {
         flex-direction: column;
+        justify-content: space-evenly;
         margin: 0;
     }
     footer {
