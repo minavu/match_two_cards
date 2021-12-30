@@ -431,7 +431,6 @@ button {
     }
     main {
         flex-direction: column;
-        justify-content: space-evenly;
         margin: 0;
     }
     footer {
