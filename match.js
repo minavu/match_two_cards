@@ -214,6 +214,7 @@ function flip(event) {
     let id = event.target.classList[0];
     let flip = document.querySelector(`.${id}.game-card-flipper`);
     flip.style.transform = "rotateY(180deg)";
+    flip.style.webkitTransform = "rotateY(180deg)";
     flip.classList.add("flipped-card");
 
     let all_flipped = document.querySelectorAll(".flipped-card");
@@ -251,7 +252,8 @@ function checkMatch(all_flipped) {
             card.classList.remove("flipped-card");
             card.classList.add("nomatch-effect-shake");
             setTimeout(() => card.classList.remove("nomatch-effect-shake"), 500);
-            card.style.transform = "rotateY(0deg)";
+            setTimeout(() => card.style.transform = "rotateY(0deg)", 300);
+            setTimeout(() => card.style.webkitTransform = "rotateY(0deg)", 300);
         });
     }
 }

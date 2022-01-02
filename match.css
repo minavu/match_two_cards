@@ -221,13 +221,16 @@ button {
 
 .game-card-container {
     perspective: 1000px;
+    -webkit-perspective: 1000px;
     margin: auto;
 }
 
 .game-card-flipper {
     position: relative;
     transition: 0.7s;
+    -webkit-transition: 0.7s;
 	transform-style: preserve-3d;
+	-webkit-transform-style: preserve-3d;
 }
 
 .game-card-placer {
@@ -239,6 +242,7 @@ button {
     top: 0;
     left: 0;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .game-card-front {
@@ -246,7 +250,9 @@ button {
     top: 0;
     left: 0;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
 }
 
 .close {
@@ -293,23 +299,31 @@ button {
     animation-name: spin;
     animation-duration: 2s;
     animation-fill-mode: forwards;
+    -webkit-animation-name: spin;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-fill-mode: forwards;
 }
 
 @keyframes spin {
     from {
         transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
     }
     25% {
         transform: rotateY(360deg);
+        -webkit-transform: rotateY(360deg);
     }
     50% {
         transform: rotateY(540deg);
+        -webkit-transform: rotateY(540deg);
     }
     75% {
         transform: rotateY(720deg);
+        -webkit-transform: rotateY(720deg);
     }
     to {
         transform: rotateY(900deg);
+        -webkit-transform: rotateY(900deg);
     }
 }
 
@@ -317,14 +331,19 @@ button {
     animation-name: scalein;
     animation-duration: 1s;
     animation-fill-mode: forwards;
+    -webkit-animation-name: scalein;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards;
 }
 
 @keyframes scalein {
     from {
         transform: scale(0);
+        -webkit-transform: scale(0);
     }
     to {
         transform: scale(1);
+        -webkit-transform: scale(1);
     }
 }
 
@@ -332,6 +351,9 @@ button {
     animation-name: fadeout;
     animation-duration: 2s;
     animation-fill-mode: forwards;
+    -webkit-animation-name: fadeout;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-fill-mode: forwards;
 }
 
 @keyframes fadeout {
@@ -346,41 +368,54 @@ button {
 .nomatch-effect-shake {
     animation-name: shake;
     animation-duration: .5s;
+    -webkit-animation-name: shake;
+    -webkit-animation-duration: .5s;
 }
 
 @keyframes shake {
     from {
         transform: translate(-5px);
+        -webkit-transform: translate(-5px);
     }
     10% {
         transform: translate(5px);
+        -webkit-transform: translate(5px);
     }
     20% {
         transform: translate(-5px);
+        -webkit-transform: translate(-5px);
     }
     30% {
         transform: translate(5px);
+        -webkit-transform: translate(5px);
     }
     40% {
         transform: translate(-5px);
+        -webkit-transform: translate(-5px);
     }
     50% {
         transform: translate(5px);
+        -webkit-transform: translate(5px);
     }
     60% {
         transform: translate(-5px);
+        -webkit-transform: translate(-5px);
     }
     70% {
         transform: translate(5px);
+        -webkit-transform: translate(5px);
     }
     80% {
         transform: translate(-5px);
+        -webkit-transform: translate(-5px);
     }
     90% {
         transform: translate(5px);
+        -webkit-transform: translate(5px);
     }
     to {
         transform: translate(0);
+        -webkit-transform: translate(0);
     }
 }
 
@@ -388,6 +423,9 @@ button {
     animation-name: highlightbg;
     animation-duration: 0.5s;
     animation-iteration-count: 4;
+    -webkit-animation-name: highlightbg;
+    -webkit-animation-duration: 0.5s;
+    -webkit-animation-iteration-count: 4;
 }
 
 @keyframes highlightbg {
